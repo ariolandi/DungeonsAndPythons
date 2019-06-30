@@ -19,7 +19,7 @@ finished: bool - indicates dungeon's end
 battle: bool - indicates a battle
 ------------
 Methods:
-[private]__read_file(file_name) -> list[string] - opens a file and
+[private]__read_file(string) -> list[string] - opens a file and
                                                   returns its content
 [private]__fill_treasures_list() -> None - reads the treasures list from a file
 [private]__fill_enemies_list() -> None - reads the enemies list from a file
@@ -31,8 +31,8 @@ Methods:
                                         gives it to the hero
 [private]__spawn_enemy() -> None - chooses an enemy from the list and initiates
                                    a battle
-[private]__can_move(row, column) -> bool - check if a given position is valid
-[private]__inspect(row, column) -> None - checks if there is a special symbol
+[private]__can_move(int, int) -> bool - check if a given position is valid
+[private]__inspect(int. int) -> None - checks if there is a special symbol
                                         on this position and make a relevant
                                         action
 spawn_hero() -> None - spawns the hero in the starting position
@@ -137,15 +137,13 @@ class Dungeon:
     @verify_direction
     def move(self, direction):
         row, column = self.hero.position
-        if direction == "up":
-            row -= 1
-        elif direction == "down":
-            row += 1
-        elif direction == "left":
-            column -= 1
-        else:
-            column += 1
-
+        move_to = {
+            "up": (row - 1, column),
+            "down": (row + 1, column),
+            "right": (row, column + 1),
+            "left": (row, column - 1)
+        }
+        row, column = move_to[direction]
         if self.__can_move(row, column):
             self.__inspect(row, column)
             self.__move_hero_to(row, column)

@@ -3,15 +3,6 @@ from utils import verify_positive, verify_types, verify_value
 from treasure import Treasure
 
 
-# verifies if can attack the enemy
-def verify_enemy(enemy):
-    from enemy import Enemy
-    if not isinstance(enemy, Enemy):
-        raise TypeError("Heroes attack only enemies")
-    if enemy.is_alive() is False:
-        raise ValueError("The enemy is already dead")
-
-
 """
 Hero class
 inherits Character
@@ -25,6 +16,8 @@ regeneration_rate: int - a small amount of health/mana points
 Methods:
 known_as() -> str - return the full name (name + title) of the hero
 __str__() -> str - string representation of the hero (hero's info)
+[private]__verify_hero(Enemy) -> None/TypeError/ValueError - verifies 
+                            if the given argument can be attacked
 take_treasure(Treasure) -> None - loads the treasure according to the type
 regenerate() -> None - restore a small amount of health/mana points
 attack(Enemy) -> None - attacks the enemy
@@ -56,6 +49,13 @@ mana {self.mana}\n"
             str_hero += "spell: " + str(self.spell) + "\n"
         return str_hero
 
+    def __verify_enemy(self, enemy):
+        from enemy import Enemy
+        if not isinstance(enemy, Enemy):
+            raise TypeError("Heroes attack only enemies")
+        if enemy.is_alive() is False:
+            raise ValueError("The enemy is already dead")
+
     @verify_types(treasure=Treasure)
     def take_treasure(self, treasure):
         if treasure.type == 'weapon':
@@ -75,7 +75,7 @@ mana {self.mana}\n"
     @verify_types(by=[str, None])
     def attack(self, enemy, by=None):
         verify_value(by, ['weapon', 'spell', None])
-        verify_enemy(enemy)
+        self.__verify_enemy(enemy)
         if by == 'weapon':
             self.use_weapon(enemy)
         elif by == 'spell':
