@@ -64,3 +64,11 @@ def verify_positive(func):
 def verify_value(arg, values):
     if arg not in values:
         raise ValueError(f"{values} expected")
+
+
+# calculates distance between two points
+def get_distance(position1, position2):
+    from math import sqrt
+    distance = (position1[0] - position2[0]) ** 2 +\
+               (position1[1] - position2[1]) ** 2
+    return distance

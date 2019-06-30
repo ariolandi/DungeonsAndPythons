@@ -1,4 +1,4 @@
-from utils import verify_types, verify_positive
+from utils import verify_types, verify_positive, get_distance
 from weapon import Weapon
 from spell import Spell
 
@@ -28,10 +28,13 @@ is_alive() -> bool - returns True if character's health is a positive
 take_healing(int) -> None - restore some character's health points
 take_mana(int) -> None - restore some character's mana points;
 take_damade(int) -> None - reduce some character's health points
+reduce_mana(int) -> None - reduce some chaacter's mana points
 equip_weapon(Weapon) -> None - equip new weapon if the character has none
                                or the new is better than the old one
 learn_spell(Spell) -> None - learn new spell if the character has none
                              or the new is better than the old one
+use_weapon(Enemy) -> None - attacks the enemy with a weapon if possible
+cast_spell(Enemy) -> None - attacks the enemy with a weapon if possible
 """
 
 
@@ -43,6 +46,7 @@ class Character:
         self.mana = mana
         self.weapon = weapon
         self.spell = spell
+        self.position = (0, 0)
 
     def is_alive(self):
         return self.health > 0
@@ -65,6 +69,12 @@ class Character:
     def take_damage(self, damage):
         self.health = max(self.health - damage, 0)
 
+    @verify_positive
+    @verify_types(mana_points=int)
+    @verify_alive
+    def reduce_mana(self, mana_points):
+        self.mana = max(0, self.mana - mana_points)
+
     @verify_types(Weapon)
     @verify_alive
     def equip_weapon(self, weapon):
@@ -76,3 +86,17 @@ class Character:
     def learn_spell(self, spell):
         if self.spell is None or spell > self.self:
             self.spell = spell
+
+    @verify_alive
+    def use_weapon(self, enemy):
+        if self.weapon is not None and\
+           get_distance(self.position, enemy.position) <= 1:
+            enemy.take_damage(self.weapon.damage)
+
+    @verify_alive
+    def cast_spell(self, enemy):
+        if self.spell is not None and\
+           self.mana >= self.spell.mana_cost and\
+           get_distance(self.position, enemy.position) <= self.spell.cast_range:
+            self.reduce_mana(self.spell.mana_cost)
+            enemy.take_damage(self.spell.damage)

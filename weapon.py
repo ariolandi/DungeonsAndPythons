@@ -17,7 +17,7 @@ __gt__(Weapon) -> bool - operator > (in damage)
 class Weapon:
     @verify_positive
     @verify_types(str, int)
-    def __init__(self, name="weapon", damage=20):
+    def __init__(self, name='weapon', damage=20):
         self.name = name
         self.damage = damage
 
