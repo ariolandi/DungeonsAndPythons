@@ -1,0 +1,4 @@
+weapon 50 sword
+health 50
+spell 100 Fire
+spell 20 Magic_spell

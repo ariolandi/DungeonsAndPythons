@@ -66,9 +66,33 @@ def verify_value(arg, values):
         raise ValueError(f"{values} expected")
 
 
-# calculates distance between two points
-def get_distance(position1, position2):
-    from math import sqrt
-    distance = (position1[0] - position2[0]) ** 2 +\
-               (position1[1] - position2[1]) ** 2
-    return distance
+"""
+Class method decorator
+----------------------
+Verifies if the direction is correct
+"""
+
+
+def verify_direction(func):
+    def check_direction(self, *args, **kwargs):
+        directions = ["up", "down", "right", "left"]
+        correct_directions = all(
+            argument in directions
+            for argument in list(args)
+        ) & all(
+            argument in directions
+            for argument in kwargs.values()
+        )
+        if not correct_directions:
+            raise ValueError(
+                "Incorrect direction"
+            )
+        return func(self, *args, **kwargs)
+    return check_direction
+
+
+# Shuffles a list and returns the first element
+def take_random(items):
+    from random import shuffle
+    shuffle(items)
+    return items[0]

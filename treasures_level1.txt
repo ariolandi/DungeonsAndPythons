@@ -1,0 +1,3 @@
+weapon 50 sword
+health 10
+spell 50 Lightning_bold

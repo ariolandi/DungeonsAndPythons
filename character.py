@@ -1,4 +1,4 @@
-from utils import verify_types, verify_positive, get_distance
+from utils import verify_types, verify_positive
 from weapon import Weapon
 from spell import Spell
 
@@ -89,14 +89,12 @@ class Character:
 
     @verify_alive
     def use_weapon(self, enemy):
-        if self.weapon is not None and\
-           get_distance(self.position, enemy.position) <= 1:
+        if self.weapon is not None:
             enemy.take_damage(self.weapon.damage)
 
     @verify_alive
     def cast_spell(self, enemy):
         if self.spell is not None and\
-           self.mana >= self.spell.mana_cost and\
-           get_distance(self.position, enemy.position) <= self.spell.cast_range:
+           self.mana >= self.spell.mana_cost:
             self.reduce_mana(self.spell.mana_cost)
             enemy.take_damage(self.spell.damage)

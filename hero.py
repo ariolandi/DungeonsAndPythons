@@ -33,7 +33,7 @@ attack(Enemy) -> None - attacks the enemy
 
 class Hero(Character):
     @verify_positive
-    @verify_types(name=str, title=str, health=int, mana=int)
+    @verify_types(name=str, title=str, health=int, mana=int, regeneration_rate=int)
     def __init__(self, name, title, health, mana, regeneration_rate):
         Character.__init__(
             self,
@@ -58,13 +58,13 @@ mana {self.mana}\n"
 
     @verify_types(treasure=Treasure)
     def take_treasure(self, treasure):
-        if treasure.type is 'weapon':
+        if treasure.type == 'weapon':
             self.equip_weapon(treasure.item)
-        elif treasure.type is 'spell':
+        elif treasure.type == 'spell':
             self.learn_spell(treasure.item)
-        elif treasure.type is 'mana potion':
+        elif treasure.type == 'mana potion':
             self.take_mana(treasure.item)
-        elif treasure.type is 'health potion':
+        elif treasure.type == 'health potion':
             self.take_healing(treasure.item)
 
     def regenerate(self):
@@ -76,9 +76,9 @@ mana {self.mana}\n"
     def attack(self, enemy, by=None):
         verify_value(by, ['weapon', 'spell', None])
         verify_enemy(enemy)
-        if by is 'weapon':
+        if by == 'weapon':
             self.use_weapon(enemy)
-        elif by is 'spell':
+        elif by == 'spell':
             self.cast_spell(enemy)
         else:
             if self.weapon is not None:
